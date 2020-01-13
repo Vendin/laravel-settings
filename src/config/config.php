@@ -56,7 +56,8 @@ return [
 	'forgetCacheByWrite' => true,
 	// TTL in seconds.
 	'cacheTtl' => 15,
-    
+    // Use loaded data.
+    'enableUseLoadedData' => true,
     /*
     |--------------------------------------------------------------------------
     | Default Settings
