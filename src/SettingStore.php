@@ -77,6 +77,13 @@ abstract class SettingStore
 	 */
 	protected $cacheForgetOnWrite = true;
 
+    /**
+     *  Use loaded data.
+     *
+     * @var boolean
+     */
+    protected $useLoadedData = true;
+
 	/**
 	 * Set default values.
 	 *
@@ -93,7 +100,7 @@ abstract class SettingStore
 	 * @param int $ttl
 	 * @param bool $forgetOnWrite
 	 */
-	public function setCache($cache, $ttl = null, $forgetOnWrite = null)
+	public function setCache($cache, $ttl = null, $forgetOnWrite = null, $useLoadedData = null)
 	{
 		$this->cache = $cache;
 		if ($ttl !== null) {
@@ -102,6 +109,9 @@ abstract class SettingStore
 		if ($forgetOnWrite !== null) {
 			$this->cacheForgetOnWrite = $forgetOnWrite;
 		}
+		if($useLoadedData != null) {
+		    $this->useLoadedData = $useLoadedData;
+        }
 	}
 
 	/**
@@ -119,7 +129,7 @@ abstract class SettingStore
 		} elseif (is_array($key) && is_array($default)) {
 			$default = array_merge(ArrayUtil::get($this->defaults, $key, []), $default);
 		}
-        
+
 		$this->load();
 
 		return ArrayUtil::get($this->data, $key, $default);
@@ -149,7 +159,7 @@ abstract class SettingStore
 	{
 		$this->load();
 		$this->unsaved = true;
-		
+
 		if (is_array($key)) {
 			foreach ($key as $k => $v) {
 				ArrayUtil::set($this->data, $k, $v);
@@ -228,7 +238,7 @@ abstract class SettingStore
 	 */
 	public function load($force = false)
 	{
-		if (!$this->loaded || $force) {
+        if ((!($this->loaded && $this->useLoadedData)) || $force) {
 			$this->data = $this->readData();
             $this->persistedData = $this->data;
             $this->data = array_merge($this->updatedData, $this->data);

@@ -68,7 +68,8 @@ class SettingsManager extends Manager
 			$store->setCache(
 				$this->getSupportedContainer()['cache'],
 				$this->getConfig('anlutro/l4-settings::cacheTtl'),
-				$this->getConfig('anlutro/l4-settings::forgetCacheByWrite')
+				$this->getConfig('anlutro/l4-settings::forgetCacheByWrite'),
+                $this->getConfig('anlutro/l4-settings::enableUseLoadedData')
 			);
 		}
 
